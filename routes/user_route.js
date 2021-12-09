@@ -2,6 +2,8 @@ const express = require("express");
 
 const User = require("../models/user_model");
 
+const bcrypt = require("bcrypt");                   // to encrypt the password to hash
+
 const routes = express.Router();
 
 routes.get("/", (req, res) => {
@@ -43,13 +45,17 @@ routes.post("/api/auth/signin", async (req, res) => {
 
 // SignUp Route
 routes.post("/api/auth/signup", async (req, res) => {
+
   try {
     if (req.body.password != null) {
+
+      const salt = await bcrypt.genSalt(10);
+      const hashPassword = await bcrypt.hash(req.body.password, salt);
       if (req.body.email != null) {
         const user = await new User({
           name: req.body.name,
           email: req.body.email,
-          password: req.body.password,
+          password: hashPassword,
         });
         //Save or send data to the MongoDB collection
         await user.save();
