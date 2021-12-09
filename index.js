@@ -28,6 +28,9 @@ var MONGO_URL =
 
 // MiddleWare
 middleware = async () => {
+  app.use(express.urlencoded({extended: false}));
+  app.use(express.json({extended: false}));
+
   app.use("/", userRoute);
   app.use('/api/auth/signin', userRoute);
   app.use('/api/auth/signup', userRoute);
