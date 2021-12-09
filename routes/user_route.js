@@ -13,8 +13,9 @@ routes.get("/", (req, res) => {
 // SignIn Route
 routes.post("/api/auth/signin", async (req, res) => {
   try {
-    if (req.body.password != null) {
+    // if (req.body.password != null) {
       if (req.body.email != null) {
+
         // check if user already exist
         const user = await User.findOne({ email: req.body.email });
         !user &&
@@ -22,9 +23,15 @@ routes.post("/api/auth/signin", async (req, res) => {
             message: "User does not exist, please register.",
           });
 
+          //validating password which is created
+          const validPassword = await bcrypt.compare(req.body.password, user.password)
+          !validPassword && res.status(404).json({
+            message: "Invalid Password"
+          });
+
         if (user != null) {
           res.json({
-            message: "Success",
+            message: "Login Success",
             body: user,
           });
         }
@@ -33,11 +40,11 @@ routes.post("/api/auth/signin", async (req, res) => {
           message: "Email is Required",
         });
       }
-    } else {
-      res.status(400).json({
-        message: "Password is Required",
-      });
-    }
+    // } else {
+    //   res.status(400).json({
+    //     message: "Password is Required",
+    //   });
+    // }
   } catch (error) {
     console.log("An Error " + error.message);
   }
@@ -60,7 +67,10 @@ routes.post("/api/auth/signup", async (req, res) => {
         //Save or send data to the MongoDB collection
         await user.save();
         //Return Json
-        res.json(user);
+        res.json({
+          message:"Successfully Registerd",
+          token: hashPassword
+        });
       } else {
         res.status(400).json({
           message: "Email is Required",
