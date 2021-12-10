@@ -67,7 +67,7 @@ routes.post("/api/auth/signup", async (req, res) => {
         //Save or send data to the MongoDB collection
         await user.save();
         //Return Json
-        res.json({
+        res.status(200).json({
           message:"Successfully Registerd",
           token: hashPassword
         });
