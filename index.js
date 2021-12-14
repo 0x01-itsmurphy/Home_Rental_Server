@@ -14,7 +14,7 @@ const fileUpload = require("express-fileupload");
 
 dotenv.config();
 var app = express();
-var port = process.env.PORT || process.env.PORT || 80;
+// var port = process.env.PORT || process.env.PORT || 80;
 var MONGO_URL = process.env.MONGODB_URL;
 
 // MiddleWare
@@ -56,8 +56,8 @@ const connectMongoose = async () => {
 };
 
 const listenToPort = async () => {
-  app.listen(port, () => {
-    console.log("Server Running Port " + port);
+  app.listen(process.env.PORT || 80, () => {
+    console.log("Server Running" );
   });
 };
 
