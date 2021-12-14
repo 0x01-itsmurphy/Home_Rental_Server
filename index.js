@@ -1,36 +1,42 @@
-var http = require("http");
-var dt = require("./first");
-
-// --------------------using nodeJs
-// http
-//   .createServer(function (req, res) {
-//     res.writeHead(200, { "Content-type": "text/html" });
-//     // res.write("Current date time is: " + dt.myDateTime());
-//     res.write(req.url);
-//     res.end();
-//   })
-//   .listen(5000);
-
-// -------------------------using Express --------- --
-
-// import express, { Request, Response } from "express";
-
 const express = require("express");
 const mongoose = require("mongoose");
-// const User = require("../models/User");
 
 const userRoute = require("./routes/user_route");
+const dataRoute = require("./routes/data_route");
+const crudRoute = require("./routes/crud_route");
 
+const newRoute = require("./routes/new");
+
+const dotenv = require("dotenv");
+
+const fileUpload = require("express-fileupload");
+
+
+dotenv.config();
 var app = express();
-var port = process.env.port || 8000;
-var MONGO_URL =
-  "mongodb+srv://bella:mongodbtest@cluster0.fszhg.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+var MONGO_URL = process.env.MONGODB_URL;
 
 // MiddleWare
 middleware = async () => {
+  app.use(express.urlencoded({ extended: false }));
+  app.use(express.json({ extended: false }));
+
+  app.use(fileUpload({ useTempFiles: true }));
+
   app.use("/", userRoute);
-  app.use('/api/auth/signin', userRoute);
-  app.use('/api/auth/signup', userRoute);
+  app.use("/api/auth/signin", userRoute);
+  app.use("/api/auth/signup", userRoute);
+
+  // app.use('/', dataRoute);
+  app.use("/posts", dataRoute);
+  app.use("/uploads", express.static("uploads"));
+
+  // app.use(checkToken)
+
+  app.use("/api", crudRoute);
+
+  app.use("/", newRoute);
+  app.use("/bla/bla", newRoute);
 };
 
 //Function to connect MongoDB
@@ -48,13 +54,9 @@ const connectMongoose = async () => {
   }
 };
 
-// app.get("/", (req, res) => {
-//   res.send("Api Running");
-// });
-
 const listenToPort = async () => {
-  app.listen(port, () => {
-    console.log("Server Running Port " + port);
+  app.listen(process.env.PORT, () => {
+    console.log("Server Running" );
   });
 };
 
