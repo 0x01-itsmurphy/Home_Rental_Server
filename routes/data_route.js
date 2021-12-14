@@ -53,7 +53,7 @@ routes.post("/add", checkToken.cToken, async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(500).json({
-      message: "Data not added",
+      message: "Data Uploading failed",
     });
   }
 });

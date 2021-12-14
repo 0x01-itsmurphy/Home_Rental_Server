@@ -5,14 +5,14 @@ const userRoute = require("./routes/user_route");
 const dataRoute = require("./routes/data_route");
 const crudRoute = require("./routes/crud_route");
 
-const newRo = require("./routes/new");
+const newRoute = require("./routes/new");
 
 const dotenv = require("dotenv");
-dotenv.config();
 
 const fileUpload = require("express-fileupload");
 
 
+dotenv.config();
 var app = express();
 var port = process.env.PORT;
 var MONGO_URL = process.env.MONGODB_URL;
@@ -29,15 +29,15 @@ middleware = async () => {
   app.use("/api/auth/signup", userRoute);
 
   // app.use('/', dataRoute);
-  app.use("/profile", dataRoute);
+  app.use("/posts", dataRoute);
   app.use("/uploads", express.static("uploads"));
 
   // app.use(checkToken)
 
   app.use("/api", crudRoute);
 
-  app.use("/", newRo);
-  app.use("/bla/bla", newRo);
+  app.use("/", newRoute);
+  app.use("/bla/bla", newRoute);
 };
 
 //Function to connect MongoDB
@@ -54,10 +54,6 @@ const connectMongoose = async () => {
     console.log("Error while Connecting to MongoDB");
   }
 };
-
-// app.get("/", (req, res) => {
-//   res.send("Api Running");
-// });
 
 const listenToPort = async () => {
   app.listen(port, () => {

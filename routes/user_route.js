@@ -96,7 +96,7 @@ routes.post("/api/auth/signup", async (req, res) => {
         const user = await new User({
           username: req.body.username,
           email: req.body.email,
-          password: req.body.password,
+          password: hashPassword,
         });
         //Save or send data to the MongoDB collection
         await user.save();

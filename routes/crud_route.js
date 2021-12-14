@@ -6,7 +6,6 @@ const UserData = require("../models/data_model");
 
 const routes = express.Router();
 
-
 // Delete user
 routes.delete("/delete/:username", async (req, res) => {
   try {
@@ -43,9 +42,8 @@ routes.get("/checkusername/:username", (req, res) => {
   });
 });
 
-
-// Get All Users Data
-routes.get("/getallusers", async (req, res) => {
+// Get All Users posts
+routes.get("/getallposts", async (req, res) => {
   try {
     const users = await UserData.find({});
     res.status(200).json({
