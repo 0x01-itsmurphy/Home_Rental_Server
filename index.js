@@ -14,7 +14,7 @@ const fileUpload = require("express-fileupload");
 
 dotenv.config();
 var app = express();
-var port = process.env.PORT;
+var port = process.env.PORT || process.env.PORT || 80;
 var MONGO_URL = process.env.MONGODB_URL;
 
 // MiddleWare
