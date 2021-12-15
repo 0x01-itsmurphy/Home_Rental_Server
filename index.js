@@ -24,8 +24,8 @@ middleware = async () => {
   app.use(fileUpload({ useTempFiles: true }));
 
   app.use("/", userRoute);
-  app.use("/api/auth/signin", userRoute);
-  app.use("/api/auth/signup", userRoute);
+  // app.use("/profile", userRoute);
+  // app.use("/profile/signup", userRoute);
 
   // app.use('/', dataRoute);
   app.use("/posts", dataRoute);

@@ -12,7 +12,7 @@ routes.get("/", (req, res) => {
 });
 
 // user profile details
-routes.get("/api/auth/:username", checkToken.cToken, (req, res) => {
+routes.get("/profile/auth/:username", checkToken.cToken, (req, res) => {
   User.findOne({ username: req.params.username }, (err, user) => {
     if (err) {
       res.status(500).json({
@@ -34,7 +34,7 @@ routes.get("/api/auth/:username", checkToken.cToken, (req, res) => {
 });
 
 // SignIn Route
-routes.post("/api/auth/signin", async (req, res) => {
+routes.post("/profile/signin", async (req, res) => {
   try {
     if (req.body.username != null) {
       // check if user already exist
@@ -76,7 +76,7 @@ routes.post("/api/auth/signin", async (req, res) => {
 });
 
 // SignUp Route
-routes.post("/api/auth/signup", async (req, res) => {
+routes.post("/profile/signup", async (req, res) => {
   try {
     if (req.body.password != null) {
       const salt = await bcrypt.genSalt(10);
