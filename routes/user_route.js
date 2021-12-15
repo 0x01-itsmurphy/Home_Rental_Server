@@ -2,7 +2,7 @@ const express = require("express");
 const User = require("../models/user_model");
 const config = require("../config");
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");// to encrypt the password to hash
+const bcrypt = require("bcrypt"); // to encrypt the password to hash
 
 const checkToken = require("../checkToken");
 const routes = express.Router();
@@ -36,9 +36,9 @@ routes.get("/profile/auth/:username", checkToken.cToken, (req, res) => {
 // SignIn Route
 routes.post("/profile/signin", async (req, res) => {
   try {
-    if (req.body.username != null) {
+    if (req.body.email != null) {
       // check if user already exist
-      const user = await User.findOne({ username: req.body.username });
+      const user = await User.findOne({ email: req.body.email });
       !user &&
         res.status(404).json({
           message: "User does not exist, please register.",
@@ -67,7 +67,7 @@ routes.post("/profile/signin", async (req, res) => {
       }
     } else {
       res.status(400).json({
-        message: "Username is Required",
+        message: "Email is Required",
       });
     }
   } catch (error) {
@@ -86,11 +86,11 @@ routes.post("/profile/signup", async (req, res) => {
       const usernameExist = await User.findOne({ username: req.body.username });
       // usernameExist && res.status(400).json({ message: "Username already exist" });
 
-      if(emailExist || usernameExist){
+      if (emailExist || usernameExist) {
         res.status(400).json({
-          message: "Email or Username already exist"
-        })
-      }      
+          message: "Email or Username already exist",
+        });
+      }
 
       if (req.body.email != null) {
         const user = await new User({
@@ -120,9 +120,7 @@ routes.post("/profile/signup", async (req, res) => {
   }
 });
 
-
-
-routes.get("/api/users",checkToken.cToken , async (req, res) => {
+routes.get("/api/users", checkToken.cToken, async (req, res) => {
   res.send("Get All the Files");
 });
 
