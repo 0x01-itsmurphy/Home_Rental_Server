@@ -57,7 +57,7 @@ routes.post("/profile/signin", async (req, res) => {
 
       if (validPassword) {
         const token = jwt.sign({ _id: user._id }, config.key, {
-          expiresIn: "15m",
+          expiresIn: "2m",
         });
         res.header("auth-token", token).json({
           message: "User logged in successfully",
