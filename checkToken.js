@@ -1,29 +1,33 @@
-const jwt = require("jsonwebtoken");
-const config = require("./config");
+const jwt = require('jsonwebtoken')
+const config = require('./config')
 
-const cToken = (req, res, next) => {
-  const token = req.headers["auth-token"];
-  // token = token.split(" ")[1];
-  console.log(token);
-  if (token) {
-    jwt.verify(token, config.key, (err, user) => {
-      if (err) {
-        return res.status(401).json({
-          status: false,
-          message: "Invalid token",
-        });
-      } else {
-        req.user = user;
-        console.log(user);
-        next();
-      }
-    });
-  } else {
-    return res.status(500).json({
+const cToken = async (req, res, next) => {
+  try {
+    const token = req.headers['auth-token'] || req.headers.authorization
+    console.log('Token received:', token)
+
+    if (!token) {
+      return res.status(401).json({
+        status: false,
+        message: 'Auth token is not supplied'
+      })
+    }
+
+    // Handle Bearer token format
+    const tokenValue = token.startsWith('Bearer ') ? token.slice(7) : token
+
+    const decoded = jwt.verify(tokenValue, config.key)
+    req.user = decoded
+    console.log('User decoded:', decoded)
+    next()
+  } catch (err) {
+    console.error('Token verification error:', err)
+    return res.status(401).json({
       status: false,
-      message: "Auth token is not supplied",
-    });
+      message: 'Invalid token',
+      error: err.message
+    })
   }
-};
+}
 
-module.exports = { cToken: cToken };
+module.exports = { cToken }

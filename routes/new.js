@@ -1,48 +1,45 @@
-const express = require("express");
-const res = require("express/lib/response");
+const express = require('express')
 
-const UserData = require("../models/data_model");
+const routes = express.Router()
 
-const checkToken = require("../checkToken");
+routes.get('/', (req, res) => {
+  res.status(200).json({
+    message: 'Home Rental Server API',
+    version: '1.0.0',
+    endpoints: {
+      auth: {
+        signin: 'POST /profile/signin',
+        signup: 'POST /profile/signup'
+      },
+      posts: {
+        create: 'POST /posts/add',
+        getAll: 'GET /posts/',
+        getById: 'GET /posts/:id'
+      },
+      api: {
+        getAllPosts: 'GET /api/getallposts',
+        deleteUser: 'DELETE /api/delete/:username',
+        checkUsername: 'GET /api/checkusername/:username'
+      }
+    }
+  })
+})
 
-//export all user data to json
+routes.all('/bla/bla', async (req, res) => {
+  res.status(200).json({
+    message: 'Test Route Working',
+    method: req.method,
+    timestamp: new Date().toISOString()
+  })
+})
 
-const routes = express.Router();
+// Health check endpoint
+routes.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'OK',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime()
+  })
+})
 
-
-// const storage = multer.diskStorage({
-//     destination: function (req, file, cb) {
-//       cb(null, "./uploads");
-//     },
-//     filename: function (req, file, cb) {
-//       cb(null, file.fieldname + file.originalname);
-//     },
-//   }),
-//   upload = multer({
-//     storage: storage,
-
-//     limits: { fileSize: 1000000 },
-//     fileFilter: function (req, file, cb) {
-//       if (
-//         file.mimetype == "image/png" ||
-//         file.mimetype == "image/jpg" ||
-//         file.mimetype == "image/jpeg"
-//       ) {
-//         cb(null, true);
-//       } else {
-//         cb(null, false);
-//         return cb(new Error("Only .png, .jpg and .jpeg format allowed!"));
-//       }
-//     },
-//   });
-
-
-routes.get("/", (req, res) => {
-  res.send("--------------------- Test Route --------------------- ");
-});
-
-routes.all("/bla/bla", async (req, res) => {
-  res.send("---------- route Route");
-});
-
-module.exports = routes;
+module.exports = routes
